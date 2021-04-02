@@ -37,3 +37,5 @@ int main()
            printf ("%c%c\n", vetor[12], vetor[13]);
        }
   }
+    return 0;
+}
