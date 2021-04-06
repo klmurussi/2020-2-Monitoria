@@ -2,6 +2,20 @@
 #include <string.h>
 #include <ctype.h>
 
+struct PESSOA {
+  char nome[50];
+  int idade;
+  char sexo;
+  char cidade[50];
+  char estado[50];
+};
+typedef struct PESSOA Pessoa;
+
+struct PESSOAS {
+  Pessoa pessoas[20000];
+};
+typedef struct PESSOAS Pessoas;
+
 struct CIDADE {
 	char nome[50];
 };
@@ -21,6 +35,7 @@ typedef struct PAIS Pais;
 //variáveis globais
 int continuar = 1; // enquanto continuar for igual a 1, o programa não vai parar
 int numero_total = 0; // número de estados cadastrados
+int numero_pessoas = 0; //número de pessoas cadastradas
 //número de cidades cadastradas em cada estado
 //primeiramente zerar todas elas
 int numero [50] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -136,8 +151,108 @@ Pais cadastrar_cidade (Pais pais) {
 	return pais;
 }
 
-void cadastrar_pessoa () {
+Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
+  printf ("\n----------------\n");
+  printf ("CADASTRAR PESSOA\n");
+  printf ("----------------\n\n");
 
+  Pessoa pessoa; //variável Pessoa candidata a cadastrar
+
+
+  //pedir informações de Pessoa
+  printf ("Nome da pessoa: ");
+  scanf ("%s", pessoa.nome);
+
+  int i;
+
+  //transformar a primeira letra em maiuscula e as outras em minusculas
+  for (i = 0; i < strlen(pessoa.nome); i++) {
+		if (i == 0)
+			pessoa.nome[i] = toupper(pessoa.nome[i]);
+		else
+			pessoa.nome[i] = tolower(pessoa.nome[i]);
+	}
+
+  do {
+    printf ("Idade da pessoa: ");
+    scanf ("%d", &pessoa.idade);
+  } while (pessoa.idade < 0);
+
+  do {
+    printf ("Sexo (F/M): ");
+    scanf ("%c", &pessoa.sexo); //apenas para limpar o buffer
+    scanf ("%c", &pessoa.sexo);
+  } while (pessoa.sexo != 'F' && pessoa.sexo != 'M');
+
+  //pedir localização da pessoa
+  int lugar;
+
+	Estado estado; //variável estado da pessoa candidata para cadastrar
+
+	//pedir o nome do estado
+	printf ("Nome do Estado: ");
+	scanf ("%s", estado.nome);
+
+	//transformar o primeiro caracter em maiusculo e os demais em minusculo
+	for (i = 0; i < strlen(estado.nome); i++) {
+		if (i == 0)
+			estado.nome[i] = toupper(estado.nome[i]);
+		else
+			estado.nome[i] = tolower(estado.nome[i]);
+	}
+
+	//analisar se esse estado já é cadastrado
+	int okay = 1; //okay igual a 1 significa que não é cadastrado
+
+	for (i = 0; i < numero_total; i++) {
+		if (strcmp (estado.nome, pais.estado[i].nome) == 0){
+			okay = 0;
+			lugar = i;
+		}
+	}
+
+	//retornar ao menu
+	if (okay == 1) {
+		printf ("Estado ainda não está cadastrado.\n");
+		return pessoas;
+	}
+
+	Cidade cidade; //variável Cidade da pessoa candidata a cadastrar
+	printf ("Nome do Cidade: ");
+	scanf ("%s", cidade.nome);
+
+	//transformar o primeiro caracter em maiusculo e os demais em minusculo
+	for (i = 0; i < strlen(cidade.nome); i++) {
+		if (i == 0)
+			cidade.nome[i] = toupper(cidade.nome[i]);
+		else
+			cidade.nome[i] = tolower(cidade.nome[i]);
+	}
+
+	//analisar se essa cidade já é cadastrada
+	okay = 1; //okay igual a 1 significa que não é cadastrada
+  int cidad;
+
+	for (i = 0; i < numero[lugar]; i++) {
+		if (strcmp (cidade.nome, pais.estado[lugar].cidades[i].nome) == 0){
+			okay = 0;
+      cidad = i;
+		}
+	}
+
+	//adicionar a pessoa candidata ao país e acrescentar mais um no número total de numero de moradores da cidade
+	if (okay == 1) {
+    printf ("Cidade ainda não está cadastrado.\n");
+		return pessoas;
+	}
+
+  strncpy(pessoas.pessoas[numero_pessoas].nome, pessoa.nome, sizeof(pessoa.nome));
+  pessoas.pessoas[numero_pessoas].idade = pessoa.idade;
+  pessoas.pessoas[numero_pessoas].sexo = pessoa.sexo;
+  strncpy(pessoas.pessoas[numero_pessoas].estado, estado.nome, sizeof(estado.nome));
+  strncpy(pessoas.pessoas[numero_pessoas].cidade, cidade.nome, sizeof(cidade.nome));
+  numero_pessoas++;
+  return pessoas;
 }
 
 void listarPessoas_porEstado () {
@@ -170,6 +285,9 @@ int main () {
 	//criação de um novo país
 	Pais pais;
 
+  //criando pessoas
+  Pessoas pessoas;
+
 	while (continuar == 1) {
 		//mostrar menu de opções
 		printf ("\n---------------------------------\n");
@@ -193,7 +311,7 @@ int main () {
 		else if (opcao == 2)
 			pais = cadastrar_cidade(pais);
 		else if (opcao == 3)
-			cadastrar_pessoa();
+		  pessoas = cadastrar_pessoa(pais, pessoas);
 		else if (opcao == 4)
 			listarPessoas_porEstado();
 		else if (opcao == 5)
