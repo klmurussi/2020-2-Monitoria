@@ -152,10 +152,15 @@ Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
 
 
   //pedir informações de Pessoa
-  printf ("Nome da pessoa: ");
-  scanf ("%s", pessoa.nome);
-
   int i;
+  char letra;
+  printf ("Nome da pessoa: ");
+  scanf ("%d", &i);
+  for (i = 0; i < 50; i++) {
+    scanf ("%c", &pessoa.nome[i]);
+    if (pessoa.nome[i] == '\n') //interromper o loop
+      break;
+  }
 
   //transformar tudo em minusculas
   for (i = 0; i < strlen(pessoa.nome); i++) {
@@ -369,10 +374,10 @@ void consultar_pessoa (Pessoas pessoas) {
   //analisar os nomes
   int j, k = 0, okay = 1;
 
-  for (i = 0; i < numero_pessoas; i++) {
-    for (j = 0; j < strlen (pessoas.pessoas[i].nome); j++) {
-      if (pessoas.pessoas[i].nome[j] == parte[k]) {
-        k++;
+  for (i = 0; i < numero_pessoas; i++) { //pecorrer o vetor pessoas.pessoas
+    for (j = 0; j < strlen (pessoas.pessoas[i].nome); j++) { // pecorrer o vetor pessoas.pessoa[i].nome
+      if (pessoas.pessoas[i].nome[j] == parte[k]) { 
+        k++; 
       }
       else
         k = 0;
