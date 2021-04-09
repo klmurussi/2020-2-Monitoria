@@ -54,11 +54,8 @@ Pais cadastrar_estado (Pais pais) {
 	printf ("Nome do Estado para cadastrar: ");
 	scanf ("%s", estado.nome);
 
-	//transformar o primeiro caracter em maiusculo e os demais em minusculo
+	//transformar tudo em minusculo
 	for (i = 0; i < strlen(estado.nome); i++) {
-		if (i == 0)
-			estado.nome[i] = toupper(estado.nome[i]);
-		else
 			estado.nome[i] = tolower(estado.nome[i]);
 	}
 
@@ -95,11 +92,8 @@ Pais cadastrar_cidade (Pais pais) {
 	printf ("Nome do Estado em que está localizado a Cidade: ");
 	scanf ("%s", estado.nome);
 
-	//transformar o primeiro caracter em maiusculo e os demais em minusculo
+	//transformar tudo em minusculo
 	for (i = 0; i < strlen(estado.nome); i++) {
-		if (i == 0)
-			estado.nome[i] = toupper(estado.nome[i]);
-		else
 			estado.nome[i] = tolower(estado.nome[i]);
 	}
 
@@ -124,11 +118,8 @@ Pais cadastrar_cidade (Pais pais) {
 	printf ("Nome do Cidade para cadastrar: ");
 	scanf ("%s", cidade.nome);
 
-	//transformar o primeiro caracter em maiusculo e os demais em minusculo
+	//transformar tudo em minusculo
 	for (i = 0; i < strlen(cidade.nome); i++) {
-		if (i == 0)
-			cidade.nome[i] = toupper(cidade.nome[i]);
-		else
 			cidade.nome[i] = tolower(cidade.nome[i]);
 	}
 
@@ -166,11 +157,8 @@ Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
 
   int i;
 
-  //transformar a primeira letra em maiuscula e as outras em minusculas
+  //transformar tudo em minusculas
   for (i = 0; i < strlen(pessoa.nome); i++) {
-		if (i == 0)
-			pessoa.nome[i] = toupper(pessoa.nome[i]);
-		else
 			pessoa.nome[i] = tolower(pessoa.nome[i]);
 	}
 
@@ -183,7 +171,7 @@ Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
     printf ("Sexo (F/M): ");
     scanf ("%c", &pessoa.sexo); //apenas para limpar o buffer
     scanf ("%c", &pessoa.sexo);
-  } while (pessoa.sexo != 'F' && pessoa.sexo != 'M');
+  } while (pessoa.sexo != 'F' && pessoa.sexo != 'M' && pessoa.sexo != 'f' && pessoa.sexo != 'm');
 
   //pedir localização da pessoa
   int lugar;
@@ -194,11 +182,8 @@ Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
 	printf ("Nome do Estado: ");
 	scanf ("%s", estado.nome);
 
-	//transformar o primeiro caracter em maiusculo e os demais em minusculo
+	//transformar tudo em minusculo
 	for (i = 0; i < strlen(estado.nome); i++) {
-		if (i == 0)
-			estado.nome[i] = toupper(estado.nome[i]);
-		else
 			estado.nome[i] = tolower(estado.nome[i]);
 	}
 
@@ -222,11 +207,8 @@ Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
 	printf ("Nome do Cidade: ");
 	scanf ("%s", cidade.nome);
 
-	//transformar o primeiro caracter em maiusculo e os demais em minusculo
+	//transformar tudo em minusculo
 	for (i = 0; i < strlen(cidade.nome); i++) {
-		if (i == 0)
-			cidade.nome[i] = toupper(cidade.nome[i]);
-		else
 			cidade.nome[i] = tolower(cidade.nome[i]);
 	}
 
@@ -267,12 +249,9 @@ void listarPessoas_porEstado (Pais pais, Pessoas pessoas) {
   printf ("Nome do Estado: ");
   scanf ("%s", estado);
 
-  //transformar o primeiro caracter em maiusculo e os demais em minusculo
+  //transformar tudo em minusculo
   int i;
 	for (i = 0; i < strlen(estado); i++) {
-		if (i == 0)
-			estado[i] = toupper(estado[i]);
-		else
 			estado[i] = tolower(estado[i]);
 	}
 
@@ -301,6 +280,7 @@ void listarPessoas_porEstado (Pais pais, Pessoas pessoas) {
   return;
 }
 
+//função para mostrar todas as pessoas de uma certa Cidade
 void listarPessoas_porCidade (Pais pais, Pessoas pessoas) {
   printf ("\n\n-------------------------\n");
   printf ("Listar Pessoas por Cidade\n");
@@ -311,12 +291,9 @@ void listarPessoas_porCidade (Pais pais, Pessoas pessoas) {
   printf ("Nome do Estado: ");
   scanf ("%s", estado);
 
-  //transformar o primeiro caracter em maiusculo e os demais em minusculo
+  //transformar tudo em minusculo
   int i;
 	for (i = 0; i < strlen(estado); i++) {
-		if (i == 0)
-			estado[i] = toupper(estado[i]);
-		else
 			estado[i] = tolower(estado[i]);
 	}
 
@@ -342,11 +319,8 @@ void listarPessoas_porCidade (Pais pais, Pessoas pessoas) {
   printf ("Nome da Cidade: ");
   scanf ("%s", cidade);
 
-  //transformar o primeiro caracter em maiusculo e os demais em minusculo
+  //transformaro tudo em minusculo
 	for (i = 0; i < strlen(cidade); i++) {
-		if (i == 0)
-			cidade[i] = toupper(cidade[i]);
-		else
 			cidade[i] = tolower(cidade[i]);
 	}
 
@@ -376,8 +350,49 @@ void listarPessoas_porCidade (Pais pais, Pessoas pessoas) {
   return;
 }
 
-void consultar_pessoa () {
+//função para pesquisar pessoas por parte do nome
+void consultar_pessoa (Pessoas pessoas) {
+  printf ("\n\n----------------\n");
+  printf ("Consultar Pessoa\n");
+  printf ("----------------\n\n");
 
+  //pedir parte do nome
+  char parte[50];
+  printf ("Parte do nome: ");
+  scanf ("%s", parte);
+
+  //trasnformar tudo em minusculo
+  int i;
+  for (i = 0; i < strlen (parte); i++)
+    parte[i] = tolower(parte[i]);
+
+  //analisar os nomes
+  int j, k = 0, okay = 1;
+
+  for (i = 0; i < numero_pessoas; i++) {
+    for (j = 0; j < strlen (pessoas.pessoas[i].nome); j++) {
+      if (pessoas.pessoas[i].nome[j] == parte[k]) {
+        k++;
+      }
+      else
+        k = 0;
+      if (k == (strlen (parte) - 1))
+        okay = 0;
+    }
+    
+    if (okay == 0) {
+      printf ("\nNome: %s - ", pessoas.pessoas[i].nome);
+      printf ("Idade: %d - ", pessoas.pessoas[i].idade);
+      printf ("Sexo: %c - ", pessoas.pessoas[i].sexo);
+      printf ("Cidade: %s - ", pessoas.pessoas[i].cidade);
+      printf ("Estado: %s\n", pessoas.pessoas[i].estado);
+    }
+
+    okay = 1;
+    k = 0;
+  }
+
+  return;
 }
 
 void excluir_pessoa () {
@@ -430,7 +445,7 @@ int main () {
 		else if (opcao == 5)
 			listarPessoas_porCidade(pais, pessoas);
 		else if (opcao == 6)
-			consultar_pessoa();
+			consultar_pessoa(pessoas);
 		else if (opcao == 7)
 			excluir_pessoa();
 		else if (opcao == 8)
