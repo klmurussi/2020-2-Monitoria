@@ -301,8 +301,79 @@ void listarPessoas_porEstado (Pais pais, Pessoas pessoas) {
   return;
 }
 
-void listarPessoas_porCidade () {
-  
+void listarPessoas_porCidade (Pais pais, Pessoas pessoas) {
+  printf ("\n\n-------------------------\n");
+  printf ("Listar Pessoas por Cidade\n");
+  printf ("-------------------------\n\n");
+
+  //pedir informações do estado
+  char estado[50];
+  printf ("Nome do Estado: ");
+  scanf ("%s", estado);
+
+  //transformar o primeiro caracter em maiusculo e os demais em minusculo
+  int i;
+	for (i = 0; i < strlen(estado); i++) {
+		if (i == 0)
+			estado[i] = toupper(estado[i]);
+		else
+			estado[i] = tolower(estado[i]);
+	}
+
+  //verificação se o estado é cadastrado
+  int okay = 1; //okay igual a 1 significa que não é cadastrado
+  int lugar; //irá armazenar a posição do estado pesquisado no vetor
+
+	for (i = 0; i < numero_total; i++) {
+		if (strcmp (estado, pais.estado[i].nome) == 0){
+			okay = 0;
+			lugar = i;
+		}
+	}
+
+	//retornar ao menu
+	if (okay == 1) {
+		printf ("Estado ainda não está cadastrado.\n");
+		return;
+	}
+
+  //pedir informações da cidade
+  char cidade[50];
+  printf ("Nome da Cidade: ");
+  scanf ("%s", cidade);
+
+  //transformar o primeiro caracter em maiusculo e os demais em minusculo
+	for (i = 0; i < strlen(cidade); i++) {
+		if (i == 0)
+			cidade[i] = toupper(cidade[i]);
+		else
+			cidade[i] = tolower(cidade[i]);
+	}
+
+  //verificação se a cidade é cadastrada
+  int posicao; //irá armazenar a posição da cidade pesquisada no vetor
+
+	for (i = 0; i < numero[lugar]; i++) {
+		if (strcmp (cidade, pais.estado[lugar].cidades[i].nome) == 0){
+			okay = 0;
+      posicao = i;
+		}
+	}
+
+	//retornar ao menu
+	if (okay == 1) {
+		printf ("Cidade ainda não está cadastrada.\n");
+		return;
+	}
+
+  for (i = 0; i < numero_pessoas; i++) {
+    if (strcmp(cidade, pessoas.pessoas[i].cidade) == 0) {
+      if (strcmp (estado, pessoas.pessoas[i].estado) == 0)
+        printf ("%s\n", pessoas.pessoas[i].nome);
+    }
+  }
+
+  return;
 }
 
 void consultar_pessoa () {
@@ -357,7 +428,7 @@ int main () {
 		else if (opcao == 4)
 			listarPessoas_porEstado(pais, pessoas);
 		else if (opcao == 5)
-			listarPessoas_porCidade();
+			listarPessoas_porCidade(pais, pessoas);
 		else if (opcao == 6)
 			consultar_pessoa();
 		else if (opcao == 7)
