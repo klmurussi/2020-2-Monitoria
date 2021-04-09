@@ -151,6 +151,7 @@ Pais cadastrar_cidade (Pais pais) {
 	return pais;
 }
 
+//função para cadastrar pessoa
 Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
   printf ("\n----------------\n");
   printf ("CADASTRAR PESSOA\n");
@@ -255,12 +256,53 @@ Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
   return pessoas;
 }
 
-void listarPessoas_porEstado () {
+//função para mostrar todas as pessoas de um certo Estado
+void listarPessoas_porEstado (Pais pais, Pessoas pessoas) {
+  printf ("\n\n-------------------------\n");
+  printf ("Listar Pessoas por Estado\n");
+  printf ("-------------------------\n\n");
 
+  //pedir informações do estado
+  char estado[50];
+  printf ("Nome do Estado: ");
+  scanf ("%s", estado);
+
+  //transformar o primeiro caracter em maiusculo e os demais em minusculo
+  int i;
+	for (i = 0; i < strlen(estado); i++) {
+		if (i == 0)
+			estado[i] = toupper(estado[i]);
+		else
+			estado[i] = tolower(estado[i]);
+	}
+
+  //verificação se o estado é cadastrado
+  int okay = 1; //okay igual a 1 significa que não é cadastrado
+  int lugar; //irá armazenar a posição do estado pesquisado no vetor
+
+	for (i = 0; i < numero_total; i++) {
+		if (strcmp (estado, pais.estado[i].nome) == 0){
+			okay = 0;
+			lugar = i;
+		}
+	}
+
+	//retornar ao menu
+	if (okay == 1) {
+		printf ("Estado ainda não está cadastrado.\n");
+		return;
+	}
+
+  for (i = 0; i < numero_pessoas; i++) {
+    if (strcmp(estado, pessoas.pessoas[i].estado) == 0)
+      printf ("%s\n", pessoas.pessoas[i].nome);
+  }
+
+  return;
 }
 
 void listarPessoas_porCidade () {
-
+  
 }
 
 void consultar_pessoa () {
@@ -313,7 +355,7 @@ int main () {
 		else if (opcao == 3)
 		  pessoas = cadastrar_pessoa(pais, pessoas);
 		else if (opcao == 4)
-			listarPessoas_porEstado();
+			listarPessoas_porEstado(pais, pessoas);
 		else if (opcao == 5)
 			listarPessoas_porCidade();
 		else if (opcao == 6)
