@@ -155,12 +155,7 @@ Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
   int i;
   char letra;
   printf ("Nome da pessoa: ");
-  scanf ("%d", &i);
-  for (i = 0; i < 50; i++) {
-    scanf ("%c", &pessoa.nome[i]);
-    if (pessoa.nome[i] == '\n') //interromper o loop
-      break;
-  }
+  scanf ("%s", pessoa.nome);
 
   //transformar tudo em minusculas
   for (i = 0; i < strlen(pessoa.nome); i++) {
@@ -400,12 +395,65 @@ void consultar_pessoa (Pessoas pessoas) {
   return;
 }
 
-void excluir_pessoa () {
+//função para excluir pessoa
+void excluir_pessoa (Pessoas pessoas) {
+	printf ("\n\n----------------\n");
+	printf ("Excluir Pessoa\n");
+	printf ("----------------\n\n");
 
+	//pedir nome
+	char nome[50];
+	printf ("Nome: ");
+	scanf ("%s", nome);
+
+	//trasnformar tudo em minusculo
+	int i;
+	for (i = 0; i < strlen (nome); i++)
+		nome[i] = tolower(nome[i]);
+
+	//analisar os nomes
+	int okay = 1; //okay igual a um significa que não foi cadastrado nenhum nome assim
+	int contador = 1; //numero de pessoas com esse nome
+
+	for (i = 0; i < numero_pessoas; i++) {
+		if (strcmp (nome, pessoas.pessoas[i].nome) == 0){
+			okay = 0;
+			printf ("\n%d) ", contador);
+			contador++;
+			printf ("Nome: %s - ", pessoas.pessoas[i].nome);
+			printf ("Idade: %d - ", pessoas.pessoas[i].idade);
+			printf ("Sexo: %c - ", pessoas.pessoas[i].sexo);
+			printf ("Cidade: %s - ", pessoas.pessoas[i].cidade);
+			printf ("Estado: %s\n", pessoas.pessoas[i].estado);
+		}
+	}
+
+	int escolha;
+	char nada[4] = "nada";
+	contador = 1;
+	if (okay == 0) {
+		printf ("\nQual deseja excluir?");
+		scanf ("%d", &escolha);
+		for (i = 0; i < numero_pessoas; i++) {
+			if (strcmp (nome, pessoas.pessoas[i].nome) == 0){
+				if (contador == escolha) {
+					printf ("ok");
+					strncpy(pessoas.pessoas[i].nome, nada, sizeof(nada));
+				    pessoas.pessoas[i].idade = 0;
+				    pessoas.pessoas[i].sexo = 'N';
+				    strncpy(pessoas.pessoas[i].estado, nada, sizeof(nada));
+				    strncpy(pessoas.pessoas[i].cidade, nada, sizeof(nada));
+				}
+				contador++;
+			}
+		}
+
+	}
+
+  return;
 }
 
-void relatorio () {
-
+Void relatorio () {
 }
 
 void encerrar () {
@@ -418,8 +466,8 @@ int main () {
 	//criação de um novo país
 	Pais pais;
 
-  //criando pessoas
-  Pessoas pessoas;
+    //criando pessoas 
+    Pessoas pessoas;
 
 	while (continuar == 1) {
 		//mostrar menu de opções
@@ -444,7 +492,7 @@ int main () {
 		else if (opcao == 2)
 			pais = cadastrar_cidade(pais);
 		else if (opcao == 3)
-		  pessoas = cadastrar_pessoa(pais, pessoas);
+		  	pessoas = cadastrar_pessoa(pais, pessoas);
 		else if (opcao == 4)
 			listarPessoas_porEstado(pais, pessoas);
 		else if (opcao == 5)
@@ -452,7 +500,7 @@ int main () {
 		else if (opcao == 6)
 			consultar_pessoa(pessoas);
 		else if (opcao == 7)
-			excluir_pessoa();
+			excluir_pessoa (pessoas); //não completa
 		else if (opcao == 8)
 			relatorio();
 		else if (opcao == 9)
