@@ -449,11 +449,61 @@ void excluir_pessoa (Pessoas pessoas) {
 		}
 
 	}
-
-  return;
 }
 
-Void relatorio () {
+Void relatorio (Pessoas pessoas) {
+	printf ("\n\n---------------------\n");
+	printf ("RELATÓRIO DEMOGRÁFICO\n");
+	printf ("---------------------\n\n");
+
+	printf ("Percentual de pessoas em cada faixa etária\n");
+	float primeiro = 0, segundo = 0, terceiro = 0, quarto = 0, quinto = 0;
+	int i, numero;
+
+	numero = numero_pessoas - 1;
+
+	//contar quantas pessoas tem em cada idade
+	for (i = 0; i < numero; i++) {
+		if (pessoas.pessoas[i].idade < 16)
+			primeiro++;
+		else if (pessoas.pessoas[i].idade >= 16 && pessoas.pessoas[i].idade < 30)
+			segundo++;
+		else if (pessoas.pessoas[i].idade >= 30 && pessoas.pessoas[i].idade < 50)
+			terceiro++;
+		else if (pessoas.pessoas[i].idade >= 50 && pessoas.pessoas[i].idade < 61)
+			quarto++;
+		else
+			quinto++;
+	}
+
+	//fazer o calculo de porcentagem
+	primeiro = primeiro/numero;
+	segundo = segundo/numero;
+	terceiro = terceiro/numero;
+	quarto = quarto/numero;
+	quinto = quinto/numero;
+
+	printf ("Pessoas de 0 a 15 anos: %.2f% \n", primeiro);
+	printf ("Pessoas de 16 a 29 anos: %.2f% \n", segundo);
+	printf ("Pessoas de 30 a 49 anos: %.2f% \n", terceiro);
+	printf ("Pessoas de 50 a 60 anos: %.2f% \n", quarto);
+	printf ("Pessoas de 60 anos ou mais: %.2f% \n", quinto);
+
+	//contar quantas pessoas tem em cada sexo
+	float feminino = 0, masculino = 0;
+	for (i = 0; i < numero; i++) {
+		if (pessoas.pessoas[i].sexo == 'F' || pessoas.pessoas[i].sexo == 'f')
+			feminino++;
+		else 
+			masculino++;
+	}
+
+	//fazer o calculo de porcentagem
+	feminino = feminino/numero;
+	masculino = masculino/numero;
+
+	printf ("\nPessoas do sexo feminino: %.2f% \n", feminino);
+	printf ("Pessoas do sexo masculino: %.2f% \n", masculino);
 }
 
 void encerrar () {
@@ -502,7 +552,7 @@ int main () {
 		else if (opcao == 7)
 			excluir_pessoa (pessoas); //não completa
 		else if (opcao == 8)
-			relatorio();
+			relatorio(pessoas);
 		else if (opcao == 9)
 			encerrar();
 		else
