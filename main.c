@@ -40,6 +40,30 @@ int numero_pessoas = 0; //número de pessoas cadastradas
 //primeiramente zerar todas elas
 int numero [50] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
+void atualizar_arquivo (Pais pais) {
+  printf ("a");
+  FILE *pont_pais; //ponteiro para arquivo pais
+  FILE *pont_pessoas; //ponteiro para arquivo pessoas
+
+
+  pont_pais = fopen ("pais.txt", "w"); //abrir aquivo pais.txt para escrita
+  pont_pessoas = fopen ("pessoas.txt", "w"); //abrir aquivo pessoas.txt para escrita
+
+  //pegar todas as informações guardadas na struct pais e armazenas no arquivo pais.txt
+  int i, j;
+  fprintf (pont_pais, "%d\n", numero_total); //printar o número total de estados cadastrados no arquivo
+  for (i = 0; i < numero_total; i++) { 
+    fprintf (pont_pais, "%s\n", pais.estado[i].nome); //printar o nome do estado no arquivo
+    fprintf (pont_pais, "%d\n", numero[i]); //printar a quantidade de cidades desse estado no arquivo
+    for (j = 0; j < numero[i]; j++) {
+      fprintf (pont_pais, "%s\n", pais.estado[i].cidades[j].nome); //printar as cidades no arquivo
+    } 
+  }  
+
+  fclose (pont_pais); //fechar arquivo pais
+  fclose (pont_pessoas); //fechar arquivo pessoas
+}
+
 //função para cadastrar um NOVO estado
 Pais cadastrar_estado (Pais pais) {
 	int i;
@@ -451,19 +475,17 @@ void excluir_pessoa (Pessoas pessoas) {
 	}
 }
 
-Void relatorio (Pessoas pessoas) {
+void relatorio (Pessoas pessoas) {
 	printf ("\n\n---------------------\n");
 	printf ("RELATÓRIO DEMOGRÁFICO\n");
 	printf ("---------------------\n\n");
 
 	printf ("Percentual de pessoas em cada faixa etária\n");
 	float primeiro = 0, segundo = 0, terceiro = 0, quarto = 0, quinto = 0;
-	int i, numero;
-
-	numero = numero_pessoas - 1;
+	int i;
 
 	//contar quantas pessoas tem em cada idade
-	for (i = 0; i < numero; i++) {
+	for (i = 0; i < numero_pessoas; i++) {
 		if (pessoas.pessoas[i].idade < 16)
 			primeiro++;
 		else if (pessoas.pessoas[i].idade >= 16 && pessoas.pessoas[i].idade < 30)
@@ -477,11 +499,11 @@ Void relatorio (Pessoas pessoas) {
 	}
 
 	//fazer o calculo de porcentagem
-	primeiro = primeiro/numero;
-	segundo = segundo/numero;
-	terceiro = terceiro/numero;
-	quarto = quarto/numero;
-	quinto = quinto/numero;
+	primeiro = primeiro/numero_pessoas * 100;
+	segundo = segundo/numero_pessoas * 100;
+	terceiro = terceiro/numero_pessoas * 100;
+	quarto = quarto/numero_pessoas * 100;
+	quinto = quinto/numero_pessoas * 100;
 
 	printf ("Pessoas de 0 a 15 anos: %.2f% \n", primeiro);
 	printf ("Pessoas de 16 a 29 anos: %.2f% \n", segundo);
@@ -491,7 +513,7 @@ Void relatorio (Pessoas pessoas) {
 
 	//contar quantas pessoas tem em cada sexo
 	float feminino = 0, masculino = 0;
-	for (i = 0; i < numero; i++) {
+	for (i = 0; i < numero_pessoas; i++) {
 		if (pessoas.pessoas[i].sexo == 'F' || pessoas.pessoas[i].sexo == 'f')
 			feminino++;
 		else 
@@ -499,25 +521,27 @@ Void relatorio (Pessoas pessoas) {
 	}
 
 	//fazer o calculo de porcentagem
-	feminino = feminino/numero;
-	masculino = masculino/numero;
+	feminino = feminino/numero_pessoas * 100;
+	masculino = masculino/numero_pessoas * 100;
 
 	printf ("\nPessoas do sexo feminino: %.2f% \n", feminino);
 	printf ("Pessoas do sexo masculino: %.2f% \n", masculino);
 }
 
-void encerrar () {
+void encerrar (Pais pais) {
+  printf ("b");
 	continuar = 0;
+  atualizar_arquivo(pais);
 }
 
 int main () {
 	int opcao;
 
 	//criação de um novo país
-	Pais pais;
+  Pais pais;
 
-    //criando pessoas 
-    Pessoas pessoas;
+  //criando pessoas 
+  Pessoas pessoas;
 
 	while (continuar == 1) {
 		//mostrar menu de opções
@@ -542,7 +566,7 @@ int main () {
 		else if (opcao == 2)
 			pais = cadastrar_cidade(pais);
 		else if (opcao == 3)
-		  	pessoas = cadastrar_pessoa(pais, pessoas);
+		  pessoas = cadastrar_pessoa(pais, pessoas);
 		else if (opcao == 4)
 			listarPessoas_porEstado(pais, pessoas);
 		else if (opcao == 5)
@@ -554,7 +578,7 @@ int main () {
 		else if (opcao == 8)
 			relatorio(pessoas);
 		else if (opcao == 9)
-			encerrar();
+			encerrar(pais);
 		else
 			printf ("Opção Inválida\n");
 	}
