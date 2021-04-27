@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 struct PESSOA {
   char nome[50];
@@ -39,6 +40,37 @@ int numero_pessoas = 0; //número de pessoas cadastradas
 //número de cidades cadastradas em cada estado
 //primeiramente zerar todas elas
 int numero [50] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+Pais carregar_arquivo (Pais pais) {
+  FILE *pont_pais; //ponteiro para o arquivo pais
+  FILE *pont_pessoas; //ponteiro para o arquivo pessoas
+  char str_text[100];
+  int i, j, num;
+
+  pont_pais = fopen ("pais.txt", "r"); //abrir arquivo pais.txt em modo de leitura
+  pont_pessoas = fopen ("pessoas.txt", "r"); //abrir arquivo pessoas.txt em modo de leitura
+
+  if (pont_pais != NULL) { //se o arquivo existir
+    fgets (str_text, 100, pont_pais); //ler a primeira linha, ou seja, quantos estados foram cadastrados
+    numero_total = atoi(str_text);
+    for (i = 0; i < numero_total; i++) { //ler os estados cadastrados
+      fgets(str_text, 50, pont_pais);
+      strncpy(pais.estado[i].nome, str_text,  strlen(str_text) -1 );
+      printf ("%s", pais.estado[i].nome);
+      fgets(str_text, 50, pont_pais); //ler quantas cidades cadastradas nesse estado
+      numero[i] = atoi(str_text);
+      for (j = 0; j < numero[i]; j++) { //ler as cidades cadastradas
+        fgets(str_text, 50, pont_pais);
+        strncpy(pais.estado[i].cidades[j].nome, str_text, strlen(str_text) -1 );
+      }
+    }
+  }
+
+  fclose (pont_pais); //fechar o arquivo pais
+  fclose (pont_pessoas); //fechar o arquivo pessoas
+
+  return pais;
+}
 
 void atualizar_arquivo (Pais pais) {
   printf ("a");
@@ -542,6 +574,8 @@ int main () {
 
   //criando pessoas 
   Pessoas pessoas;
+
+  pais = carregar_arquivo(pais);
 
 	while (continuar == 1) {
 		//mostrar menu de opções
