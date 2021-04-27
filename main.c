@@ -68,7 +68,7 @@ Pais carregar_pais (Pais pais) {
   return pais;
 }
 
-void atualizar_arquivo (Pais pais) {
+void atualizar_arquivo (Pais pais, Pessoas pessoas) {
   printf ("a");
   FILE *pont_pais; //ponteiro para arquivo pais
   FILE *pont_pessoas; //ponteiro para arquivo pessoas
@@ -86,7 +86,13 @@ void atualizar_arquivo (Pais pais) {
     for (j = 0; j < numero[i]; j++) {
       fprintf (pont_pais, "%s\n", pais.estado[i].cidades[j].nome); //printar as cidades no arquivo
     } 
-  }  
+  } 
+
+  //pegar todas as informações guardadas na struct pessoas e armazenar no arquivo pessoas.txt
+  fprintf (pont_pessoas, "%d\n", numero_pessoas); //número total de pessoas cadastradas
+  for (i = 0; i < numero_pessoas; i++) {
+    
+  }
 
   fclose (pont_pais); //fechar arquivo pais
   fclose (pont_pessoas); //fechar arquivo pessoas
@@ -560,7 +566,7 @@ void relatorio (Pessoas pessoas) {
 void encerrar (Pais pais, Pessoas pessoas) {
   printf ("b");
 	continuar = 0;
-  atualizar_arquivo(pais);
+  atualizar_arquivo(pais, pessoas);
 }
 
 int main () {
