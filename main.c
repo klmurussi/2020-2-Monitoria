@@ -13,7 +13,7 @@ struct PESSOA {
 typedef struct PESSOA Pessoa;
 
 struct PESSOAS {
-  Pessoa pessoas[20000];
+  Pessoa pessoas[14292];
 };
 typedef struct PESSOAS Pessoas;
 
@@ -41,14 +41,13 @@ int numero_pessoas = 0; //número de pessoas cadastradas
 //primeiramente zerar todas elas
 int numero [50] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
-Pais carregar_arquivo (Pais pais) {
+//função para carregar os dados do arquivo pais.txt para a struct pais
+Pais carregar_pais (Pais pais) {
   FILE *pont_pais; //ponteiro para o arquivo pais
-  FILE *pont_pessoas; //ponteiro para o arquivo pessoas
   char str_text[100];
   int i, j, num;
 
   pont_pais = fopen ("pais.txt", "r"); //abrir arquivo pais.txt em modo de leitura
-  pont_pessoas = fopen ("pessoas.txt", "r"); //abrir arquivo pessoas.txt em modo de leitura
 
   if (pont_pais != NULL) { //se o arquivo existir
     fgets (str_text, 100, pont_pais); //ler a primeira linha, ou seja, quantos estados foram cadastrados
@@ -56,7 +55,6 @@ Pais carregar_arquivo (Pais pais) {
     for (i = 0; i < numero_total; i++) { //ler os estados cadastrados
       fgets(str_text, 50, pont_pais);
       strncpy(pais.estado[i].nome, str_text,  strlen(str_text) -1 );
-      printf ("%s", pais.estado[i].nome);
       fgets(str_text, 50, pont_pais); //ler quantas cidades cadastradas nesse estado
       numero[i] = atoi(str_text);
       for (j = 0; j < numero[i]; j++) { //ler as cidades cadastradas
@@ -67,8 +65,6 @@ Pais carregar_arquivo (Pais pais) {
   }
 
   fclose (pont_pais); //fechar o arquivo pais
-  fclose (pont_pessoas); //fechar o arquivo pessoas
-
   return pais;
 }
 
@@ -452,7 +448,7 @@ void consultar_pessoa (Pessoas pessoas) {
 }
 
 //função para excluir pessoa
-void excluir_pessoa (Pessoas pessoas) {
+Pessoas excluir_pessoa (Pessoas pessoas) {
 	printf ("\n\n----------------\n");
 	printf ("Excluir Pessoa\n");
 	printf ("----------------\n\n");
@@ -495,16 +491,17 @@ void excluir_pessoa (Pessoas pessoas) {
 				if (contador == escolha) {
 					printf ("ok");
 					strncpy(pessoas.pessoas[i].nome, nada, sizeof(nada));
-				    pessoas.pessoas[i].idade = 0;
-				    pessoas.pessoas[i].sexo = 'N';
-				    strncpy(pessoas.pessoas[i].estado, nada, sizeof(nada));
-				    strncpy(pessoas.pessoas[i].cidade, nada, sizeof(nada));
+				  pessoas.pessoas[i].idade = 0;
+				  pessoas.pessoas[i].sexo = 'N';
+				  strncpy(pessoas.pessoas[i].estado, nada, sizeof(nada));
+				  strncpy(pessoas.pessoas[i].cidade, nada, sizeof(nada));
+          numero_pessoas--;
 				}
 				contador++;
 			}
 		}
-
 	}
+  return pessoas;
 }
 
 void relatorio (Pessoas pessoas) {
@@ -560,7 +557,7 @@ void relatorio (Pessoas pessoas) {
 	printf ("Pessoas do sexo masculino: %.2f% \n", masculino);
 }
 
-void encerrar (Pais pais) {
+void encerrar (Pais pais, Pessoas pessoas) {
   printf ("b");
 	continuar = 0;
   atualizar_arquivo(pais);
@@ -575,7 +572,7 @@ int main () {
   //criando pessoas 
   Pessoas pessoas;
 
-  pais = carregar_arquivo(pais);
+  pais = carregar_pais(pais);
 
 	while (continuar == 1) {
 		//mostrar menu de opções
@@ -608,11 +605,11 @@ int main () {
 		else if (opcao == 6)
 			consultar_pessoa(pessoas);
 		else if (opcao == 7)
-			excluir_pessoa (pessoas); //não completa
+			pessoas = excluir_pessoa (pessoas); //não completa
 		else if (opcao == 8)
 			relatorio(pessoas);
 		else if (opcao == 9)
-			encerrar(pais);
+			encerrar(pais, pessoas);
 		else
 			printf ("Opção Inválida\n");
 	}
