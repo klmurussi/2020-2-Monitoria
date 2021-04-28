@@ -13,7 +13,7 @@ struct PESSOA {
 typedef struct PESSOA Pessoa;
 
 struct PESSOAS {
-  Pessoa pessoas[14292];
+  Pessoa pessoas[1000];
 };
 typedef struct PESSOAS Pessoas;
 
@@ -68,8 +68,37 @@ Pais carregar_pais (Pais pais) {
   return pais;
 }
 
+//carregar a struct pessoas
+Pessoas carregar_pesssoas (Pessoas pessoas) {
+  FILE *pont_pessoas; //ponteiro para o arquivo pais
+  char str_text[100];
+  int i, j, num;
+
+  pont_pessoas = fopen ("pessoas.txt", "r"); //abrir arquivo pais.txt em modo de leitura
+
+  if (pont_pessoas != NULL) { //se o arquivo existir
+    fgets (str_text, 100, pont_pessoas); //ler a primeira linha, ou seja, quantas pessoas foram cadastradas
+    numero_pessoas = atoi(str_text);
+    for (i = 0; i < numero_pessoas; i++) { //ler as pessoas cadastradas
+      fgets(str_text, 50, pont_pessoas);
+      strncpy(pessoas.pessoas[i].nome, str_text,  strlen(str_text) -1 );
+      fgets(str_text, 50, pont_pessoas);
+      pessoas.pessoas[i].idade = atoi(str_text); 
+      fgets(str_text, 50, pont_pessoas);
+      pessoas.pessoas[i].sexo = str_text[0];
+      fgets(str_text, 50, pont_pessoas);
+      strncpy(pessoas.pessoas[i].estado, str_text,  strlen(str_text) - 1);
+      fgets(str_text, 50, pont_pessoas);
+      strncpy(pessoas.pessoas[i].cidade, str_text,  strlen(str_text) -1 );
+    }
+  }
+
+  fclose (pont_pessoas); //fechar o arquivo pais
+  return pessoas;
+}
+
+//guardar os dados em arquivos
 void atualizar_arquivo (Pais pais, Pessoas pessoas) {
-  printf ("a");
   FILE *pont_pais; //ponteiro para arquivo pais
   FILE *pont_pessoas; //ponteiro para arquivo pessoas
 
@@ -90,8 +119,12 @@ void atualizar_arquivo (Pais pais, Pessoas pessoas) {
 
   //pegar todas as informações guardadas na struct pessoas e armazenar no arquivo pessoas.txt
   fprintf (pont_pessoas, "%d\n", numero_pessoas); //número total de pessoas cadastradas
-  for (i = 0; i < numero_pessoas; i++) {
-    
+  for (i = 0; i < numero_pessoas; i++) { //printar todas as pessoas
+    fprintf (pont_pessoas, "%s\n", pessoas.pessoas[i].nome); //printar o nome da pessoa no arquivo
+    fprintf (pont_pessoas, "%d\n", pessoas.pessoas[i].idade); //printar a idade da pessoa no arquivo
+    fprintf (pont_pessoas, "%c\n", pessoas.pessoas[i].sexo); //printar o sexo da pessoa no arquivo
+    fprintf (pont_pessoas, "%s\n", pessoas.pessoas[i].estado); //printar o estado que a pessoa mora no arquivo
+    fprintf (pont_pessoas, "%s\n", pessoas.pessoas[i].cidade); //printar a cidade que a pessoa mora no arquivo
   }
 
   fclose (pont_pais); //fechar arquivo pais
@@ -564,7 +597,6 @@ void relatorio (Pessoas pessoas) {
 }
 
 void encerrar (Pais pais, Pessoas pessoas) {
-  printf ("b");
 	continuar = 0;
   atualizar_arquivo(pais, pessoas);
 }
@@ -579,6 +611,7 @@ int main () {
   Pessoas pessoas;
 
   pais = carregar_pais(pais);
+  pessoas = carregar_pesssoas(pessoas);
 
 	while (continuar == 1) {
 		//mostrar menu de opções
