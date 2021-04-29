@@ -1,4 +1,4 @@
-5
+7
 tocantins
 2
 palmas
@@ -13,3 +13,13 @@ sao
 sao
 santa
 0
+sao paulo
+4
+sao pauloiå<gu
+rio de janeiro
+sao paulo
+sao jose
+rio de janeiro
+2
+rio de janeiro
+bacia do
