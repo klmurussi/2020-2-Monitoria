@@ -48,7 +48,7 @@ Pais carregar_pais () {
   char str_text[100];
   int i, j, num;
 
-  pont_pais = fopen ("pais.txt", "r"); //abrir arquivo pais.txt em modo de leitura
+  pont_pais = fopen ("pais", "r"); //abrir arquivo pais.txt em modo de leitura
 
   if (pont_pais != NULL) { //se o arquivo existir
     fgets (str_text, 100, pont_pais); //ler a primeira linha, ou seja, quantos estados foram cadastrados
@@ -76,7 +76,7 @@ Pessoas carregar_pesssoas () {
   char str_text[100];
   int i, j, num;
 
-  pont_pessoas = fopen ("pessoas.txt", "r"); //abrir arquivo pais.txt em modo de leitura
+  pont_pessoas = fopen ("pessoas", "r"); //abrir arquivo pais.txt em modo de leitura
 
   if (pont_pessoas != NULL) { //se o arquivo existir
     fgets (str_text, 100, pont_pessoas); //ler a primeira linha, ou seja, quantas pessoas foram cadastradas
@@ -109,8 +109,8 @@ void atualizar_arquivo (Pais pais, Pessoas pessoas) {
   FILE *pont_pessoas; //ponteiro para arquivo pessoas
 
 
-  pont_pais = fopen ("pais.txt", "w"); //abrir aquivo pais.txt para escrita
-  pont_pessoas = fopen ("pessoas.txt", "w"); //abrir aquivo pessoas.txt para escrita
+  pont_pais = fopen ("pais", "w"); //abrir aquivo pais.txt para escrita
+  pont_pessoas = fopen ("pessoas", "w"); //abrir aquivo pessoas.txt para escrita
 
   //pegar todas as informações guardadas na struct pais e armazenas no arquivo pais.txt
   int i, j;
@@ -619,7 +619,7 @@ void excluir_pessoa (Pessoas pessoas) {
 		}
     if (num != -1) {
       FILE *pont_pessoas; //ponteiro para arquivo pessoas
-      pont_pessoas = fopen ("pessoas.txt", "w"); //abrir aquivo pessoas.txt para escrita
+      pont_pessoas = fopen ("pessoas", "w"); //abrir aquivo pessoas.txt para escrita
 
       //pegar todas as informações guardadas na struct pessoas e armazenar no arquivo pessoas.txt
       fprintf (pont_pessoas, "%d\n", numero_pessoas); //número total de pessoas cadastradas
