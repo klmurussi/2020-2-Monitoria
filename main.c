@@ -750,8 +750,6 @@ int main () {
 			consultar_pessoa(pessoas);
 		else if (opcao == 7) {
 			excluir_pessoa (pessoas);
-      pessoas = carregar_pesssoas();
-      pessoas = carregar_pesssoas(); //gambiarra para funcionar
     }
 		else if (opcao == 8)
 			relatorio(pessoas);
@@ -759,6 +757,11 @@ int main () {
 			encerrar(pais, pessoas);
 		else
 			printf ("Opção Inválida\n");
+
+    atualizar_arquivo(pais, pessoas);
+    pessoas = carregar_pesssoas();
+    pessoas = carregar_pesssoas(); //gambiarra para funcionar
+    pais = carregar_pais();
 	}
 
 	return 0;
