@@ -48,7 +48,7 @@ Pais carregar_pais () {
   char str_text[100];
   int i, j, num;
 
-  pont_pais = fopen ("pais", "r"); //abrir arquivo pais.txt em modo de leitura
+  pont_pais = fopen ("pais.txt", "r"); //abrir arquivo pais.txt em modo de leitura
 
   if (pont_pais != NULL) { //se o arquivo existir
     fgets (str_text, 100, pont_pais); //ler a primeira linha, ou seja, quantos estados foram cadastrados
@@ -76,7 +76,7 @@ Pessoas carregar_pesssoas () {
   char str_text[100];
   int i, j, num;
 
-  pont_pessoas = fopen ("pessoas", "r"); //abrir arquivo pais.txt em modo de leitura
+  pont_pessoas = fopen ("pessoas.txt", "r"); //abrir arquivo pais.txt em modo de leitura
 
   if (pont_pessoas != NULL) { //se o arquivo existir
     fgets (str_text, 100, pont_pessoas); //ler a primeira linha, ou seja, quantas pessoas foram cadastradas
@@ -109,8 +109,8 @@ void atualizar_arquivo (Pais pais, Pessoas pessoas) {
   FILE *pont_pessoas; //ponteiro para arquivo pessoas
 
 
-  pont_pais = fopen ("pais", "w"); //abrir aquivo pais.txt para escrita
-  pont_pessoas = fopen ("pessoas", "w"); //abrir aquivo pessoas.txt para escrita
+  pont_pais = fopen ("pais.txt", "w"); //abrir aquivo pais.txt para escrita
+  pont_pessoas = fopen ("pessoas.txt", "w"); //abrir aquivo pessoas.txt para escrita
 
   //pegar todas as informações guardadas na struct pais e armazenas no arquivo pais.txt
   int i, j;
@@ -146,8 +146,7 @@ Pais cadastrar_estado (Pais pais) {
 	printf ("CADASTRAR ESTADO\n");
 	printf ("----------------\n\n");
 
-	Estado estado; //variável estado candidato para cadastrar
-
+  char nome[50] = "i";
 	//pedir o nome do novo estado
 	printf ("Nome do Estado para cadastrar: ");
 	scanf ("%d", &i); //limpar o buffer
@@ -155,19 +154,19 @@ Pais cadastrar_estado (Pais pais) {
     scanf ("%c", &letra);
     if (letra == '\n')
       break;
-    estado.nome[i] = letra;
+    nome[i] = letra;
   }
 
 	//transformar tudo em minusculo
-	for (i = 0; i < strlen(estado.nome); i++) {
-			estado.nome[i] = tolower(estado.nome[i]);
+	for (i = 0; i < strlen(nome); i++) {
+			nome[i] = tolower(nome[i]);
 	}
 
 	//analisar se esse estado já não é cadastrado
 	int okay = 1; //okay igual a 1 significa que não é cadastrado
 
 	for (i = 0; i < numero_total; i++) {
-		if (strcmp (estado.nome, pais.estado[i].nome) == 0){
+		if (strcmp (nome, pais.estado[i].nome) == 0){
 			okay = 0;
 			printf ("Estado já cadastrado.\n");
 		}
@@ -175,7 +174,7 @@ Pais cadastrar_estado (Pais pais) {
 
 	//adicionar o estado candidato ao país e acrescentar mais um no número total de estados cadastrados
 	if (okay == 1) {
-		strncpy(pais.estado[numero_total].nome, estado.nome, sizeof(estado.nome));
+		strncpy(pais.estado[numero_total].nome, nome, sizeof(nome));
 		numero_total++;
 	}
 
@@ -191,7 +190,7 @@ Pais cadastrar_cidade (Pais pais) {
 	printf ("CADASTRAR CIDADE\n");
 	printf ("----------------\n\n");
 
-	Estado estado; //variável estado da cidade candidata para cadastrar
+	char nomeEstado[50] = "i";
 
 	//pedir o nome do estado
 	printf ("Nome do Estado em que está localizado a Cidade: ");
@@ -200,18 +199,18 @@ Pais cadastrar_cidade (Pais pais) {
     scanf ("%c", &letra);
     if (letra == '\n')
       break;
-    estado.nome[i] = letra;
+    nomeEstado[i] = letra;
   }
 	//transformar tudo em minusculo
-	for (i = 0; i < strlen(estado.nome); i++) {
-			estado.nome[i] = tolower(estado.nome[i]);
+	for (i = 0; i < strlen(nomeEstado); i++) {
+			nomeEstado[i] = tolower(nomeEstado[i]);
 	}
 
 	//analisar se esse estado já não é cadastrado
 	int okay = 1; //okay igual a 1 significa que não é cadastrado
 
 	for (i = 0; i < numero_total; i++) {
-		if (strcmp (estado.nome, pais.estado[i].nome) == 0){
+		if (strcmp (nomeEstado, pais.estado[i].nome) == 0){
 			okay = 0;
 			lugar = i;
 		}
@@ -224,26 +223,26 @@ Pais cadastrar_cidade (Pais pais) {
 	}
 
 	//agora cadastrar cidade NOVA
-	Cidade cidade;
+	char nomeCidade[50] = "i";
 	printf ("Nome do Cidade para cadastrar: ");
   scanf ("%d", &i); //limpar o buffer
   for (i = 0; i < 50; i++) {
     scanf ("%c", &letra);
     if (letra == '\n')
       break;
-    cidade.nome[i] = letra;
+    nomeCidade[i] = letra;
   }
 
 	//transformar tudo em minusculo
-	for (i = 0; i < strlen(cidade.nome); i++) {
-			cidade.nome[i] = tolower(cidade.nome[i]);
+	for (i = 0; i < strlen(nomeCidade); i++) {
+			nomeCidade[i] = tolower(nomeCidade[i]);
 	}
 
 	//analisar se essa cidade já não é cadastrada
 	okay = 1; //okay igual a 1 significa que não é cadastrada
 
 	for (i = 0; i < numero[lugar]; i++) {
-		if (strcmp (cidade.nome, pais.estado[lugar].cidades[i].nome) == 0){
+		if (strcmp (nomeCidade, pais.estado[lugar].cidades[i].nome) == 0){
 			okay = 0;
 			printf ("Cidade já cadastrado.\n");
 		}
@@ -251,7 +250,7 @@ Pais cadastrar_cidade (Pais pais) {
 
 	//adicionar a cidade candidata ao estado e acrescentar mais um no número total de cidades cadastradas
 	if (okay == 1) {
-		strncpy(pais.estado[lugar].cidades[numero[lugar]].nome, cidade.nome, sizeof(cidade.nome));
+		strncpy(pais.estado[lugar].cidades[numero[lugar]].nome, nomeCidade, sizeof(nomeCidade));
 		numero[lugar]++;
 	}
 
@@ -264,8 +263,8 @@ Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
   printf ("CADASTRAR PESSOA\n");
   printf ("----------------\n\n");
 
-  Pessoa pessoa; //variável Pessoa candidata a cadastrar
-
+  char nome[50] = "i", sexo, estado[50] = "i", cidade[50] = "i";
+  int idade;
 
   //pedir informações de Pessoa
   int i;
@@ -276,29 +275,29 @@ Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
     scanf ("%c", &letra);
     if (letra == '\n')
       break;
-    pessoa.nome[i] = letra;
+    nome[i] = letra;
   }
 
   //transformar tudo em minusculas
-  for (i = 0; i < strlen(pessoa.nome); i++) {
-			pessoa.nome[i] = tolower(pessoa.nome[i]);
+  for (i = 0; i < strlen(nome); i++) {
+			nome[i] = tolower(nome[i]);
 	}
 
   do {
     printf ("Idade da pessoa: ");
-    scanf ("%d", &pessoa.idade);
-  } while (pessoa.idade < 0);
+    scanf ("%d", &idade);
+  } while (idade < 0);
 
   do {
     printf ("Sexo (F/M): ");
-    scanf ("%c", &pessoa.sexo); //apenas para limpar o buffer
-    scanf ("%c", &pessoa.sexo);
-  } while (pessoa.sexo != 'F' && pessoa.sexo != 'M' && pessoa.sexo != 'f' && pessoa.sexo != 'm');
+    scanf ("%c", &sexo); //apenas para limpar o buffer
+    scanf ("%c", &sexo);
+  } while (sexo != 'F' && sexo != 'M' && sexo != 'f' && sexo != 'm');
 
   //pedir localização da pessoa
   int lugar;
 
-	Estado estado; //variável estado da pessoa candidata para cadastrar
+	char nomeEstado[50] = "i";
 
 	//pedir o nome do estado
 	printf ("Nome do Estado: ");
@@ -307,19 +306,19 @@ Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
     scanf ("%c", &letra);
     if (letra == '\n')
       break;
-    estado.nome[i] = letra;
+    nomeEstado[i] = letra;
   }
 
 	//transformar tudo em minusculo
-	for (i = 0; i < strlen(estado.nome); i++) {
-			estado.nome[i] = tolower(estado.nome[i]);
+	for (i = 0; i < strlen(nomeEstado); i++) {
+			nomeEstado[i] = tolower(nomeEstado[i]);
 	}
 
 	//analisar se esse estado já é cadastrado
 	int okay = 1; //okay igual a 1 significa que não é cadastrado
 
 	for (i = 0; i < numero_total; i++) {
-		if (strcmp (estado.nome, pais.estado[i].nome) == 0){
+		if (strcmp (nomeEstado, pais.estado[i].nome) == 0){
 			okay = 0;
 			lugar = i;
 		}
@@ -331,19 +330,20 @@ Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
 		return pessoas;
 	}
 
-	Cidade cidade; //variável Cidade da pessoa candidata a cadastrar
+	char nomeCidade[50] = "i";
+
 	printf ("Nome do Cidade: ");
 	scanf ("%d", &i); //limpar o buffer
   for (i = 0; i < 50; i++) {
     scanf ("%c", &letra);
     if (letra == '\n')
       break;
-    cidade.nome[i] = letra;
+    nomeCidade[i] = letra;
   }
 
 	//transformar tudo em minusculo
-	for (i = 0; i < strlen(cidade.nome); i++) {
-			cidade.nome[i] = tolower(cidade.nome[i]);
+	for (i = 0; i < strlen(nomeCidade); i++) {
+			nomeCidade[i] = tolower(nomeCidade[i]);
 	}
 
 	//analisar se essa cidade já é cadastrada
@@ -351,7 +351,7 @@ Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
   int cidad;
 
 	for (i = 0; i < numero[lugar]; i++) {
-		if (strcmp (cidade.nome, pais.estado[lugar].cidades[i].nome) == 0){
+		if (strcmp (nomeCidade, pais.estado[lugar].cidades[i].nome) == 0){
 			okay = 0;
       //cidad = i;
 		}
@@ -363,11 +363,11 @@ Pessoas cadastrar_pessoa (Pais pais, Pessoas pessoas) {
 		return pessoas;
 	}
 
-  strncpy(pessoas.pessoas[numero_pessoas].nome, pessoa.nome, sizeof(pessoa.nome));
-  pessoas.pessoas[numero_pessoas].idade = pessoa.idade;
-  pessoas.pessoas[numero_pessoas].sexo = pessoa.sexo;
-  strncpy(pessoas.pessoas[numero_pessoas].estado, estado.nome, sizeof(estado.nome));
-  strncpy(pessoas.pessoas[numero_pessoas].cidade, cidade.nome, sizeof(cidade.nome));
+  strncpy(pessoas.pessoas[numero_pessoas].nome, nome, sizeof(nome));
+  pessoas.pessoas[numero_pessoas].idade = idade;
+  pessoas.pessoas[numero_pessoas].sexo = sexo;
+  strncpy(pessoas.pessoas[numero_pessoas].estado, nomeEstado, sizeof(nomeEstado));
+  strncpy(pessoas.pessoas[numero_pessoas].cidade, nomeCidade, sizeof(nomeCidade));
   numero_pessoas++;
   return pessoas;
 }
@@ -382,9 +382,10 @@ void listarPessoas_porEstado (Pais pais, Pessoas pessoas) {
   printf ("-------------------------\n\n");
 
   //pedir informações do estado
-  char estado[50];
+  char estado[50] = "i";
   printf ("Nome do Estado: ");
   scanf ("%d", &i); //limpar o buffer
+  //scanf("%*[^\n]%*c");
   for (i = 0; i < 50; i++) {
     scanf ("%c", &letra);
     if (letra == '\n')
@@ -393,16 +394,15 @@ void listarPessoas_porEstado (Pais pais, Pessoas pessoas) {
   }
 
   //transformar tudo em minusculo
-	/*for (i = 0; i < strlen(estado); i++) {
+	for (i = 0; i < strlen(estado); i++) {
 			estado[i] = tolower(estado[i]);
-	}*/
+	}
 
   //verificação se o estado é cadastrado
   int okay = 1; //okay igual a 1 significa que não é cadastrado
   int lugar; //irá armazenar a posição do estado pesquisado no vetor
 
 	for (i = 0; i < numero_total; i++) {
-    printf ("%s-%s\n", pais.estado[i].nome, estado);
 		if (strcmp (estado, pais.estado[i].nome) == 0){
 			okay = 0;
 			lugar = i;
@@ -433,7 +433,7 @@ void listarPessoas_porCidade (Pais pais, Pessoas pessoas) {
   printf ("-------------------------\n\n");
 
   //pedir informações do estado
-  char estado[50];
+  char estado[50] = "i";
   printf ("Nome do Estado: ");
   scanf ("%d", &i); //limpar o buffer
   for (i = 0; i < 50; i++) {
@@ -466,7 +466,7 @@ void listarPessoas_porCidade (Pais pais, Pessoas pessoas) {
 	}
 
   //pedir informações da cidade
-  char cidade[50];
+  char cidade[50] = "i";
   printf ("Nome da Cidade: ");
   scanf ("%d", &i); //limpar o buffer
   for (i = 0; i < 50; i++) {
@@ -517,7 +517,7 @@ void consultar_pessoa (Pessoas pessoas) {
   printf ("----------------\n\n");
 
   //pedir parte do nome
-  char parte[50];
+  char parte[50] = "i";
   printf ("Parte do nome: ");
   scanf ("%d", &i); //limpar o buffer
   for (i = 0; i < 50; i++) {
@@ -570,7 +570,7 @@ void excluir_pessoa (Pessoas pessoas) {
 	printf ("----------------\n\n");
 
 	//pedir nome
-	char nome[50];
+	char nome[50] = "i";
 	printf ("Nome: ");
   scanf ("%d", &i); //limpar o buffer
   for (i = 0; i < 50; i++) {
@@ -590,20 +590,23 @@ void excluir_pessoa (Pessoas pessoas) {
 
   //listar todas as pessoas com esse nome
 	for (i = 0; i < numero_pessoas; i++) {
+    char nomeP[50] = "i", estado[50] = "i", cidade[50] = "i";
 		if (strcmp (nome, pessoas.pessoas[i].nome) == 0){
 			okay = 0;
-			printf ("\n%d) ", contador);
+      printf ("%d) ", contador);
 			contador++;
-			printf ("Nome: %s - ", pessoas.pessoas[i].nome);
+      strncpy(nomeP, pessoas.pessoas[i].nome, sizeof (pessoas.pessoas[i].nome));
+			printf ("Nome: %s - ", nomeP);
 			printf ("Idade: %d - ", pessoas.pessoas[i].idade);
 			printf ("Sexo: %c - ", pessoas.pessoas[i].sexo);
-			printf ("Cidade: %s - ", pessoas.pessoas[i].cidade);
-			printf ("Estado: %s\n", pessoas.pessoas[i].estado);
+      strncpy(cidade, pessoas.pessoas[i].cidade, sizeof(pessoas.pessoas[i].cidade));
+			printf ("Cidade: %s - ", cidade);
+      strncpy (estado, pessoas.pessoas[i].estado, sizeof (pessoas.pessoas[i].estado));
+			printf ("Estado: %s\n", estado);
 		}
 	}
 
 	int escolha;
-  Pessoas p;
 	contador = 1;
   int num = -1;
 	if (okay == 0) {
@@ -614,13 +617,14 @@ void excluir_pessoa (Pessoas pessoas) {
 				if (contador == escolha) {
 					num = i;
           numero_pessoas--;
+          break;
 				}
 				contador++;
 			}
 		}
     if (num != -1) {
       FILE *pont_pessoas; //ponteiro para arquivo pessoas
-      pont_pessoas = fopen ("pessoas", "w"); //abrir aquivo pessoas.txt para escrita
+      pont_pessoas = fopen ("pessoas.txt", "w"); //abrir aquivo pessoas.txt para escrita
 
       //pegar todas as informações guardadas na struct pessoas e armazenar no arquivo pessoas.txt
       fprintf (pont_pessoas, "%d\n", numero_pessoas); //número total de pessoas cadastradas
@@ -629,12 +633,17 @@ void excluir_pessoa (Pessoas pessoas) {
         return;
       }
       for (i = 0; i <= (numero_pessoas); i++) { //printar todas as pessoas
-        if (i != num) {
-          fprintf (pont_pessoas, "%s\n", pessoas.pessoas[i].nome); //printar o nome da pessoa no arquivo
+      char pessoaNome[50] = "i", estadoNome[50] = "i", cidadeNome[50] = "i";
+
+        if (i < num || i > num) {
+          strncpy(pessoaNome, pessoas.pessoas[i].nome, sizeof(pessoas.pessoas[i].nome));
+          fprintf (pont_pessoas, "%s\n", pessoaNome); //printar o nome da pessoa no arquivo
           fprintf (pont_pessoas, "%d\n", pessoas.pessoas[i].idade); //printar a idade da pessoa no arquivo
           fprintf (pont_pessoas, "%c\n", pessoas.pessoas[i].sexo); //printar o sexo da pessoa no arquivo
-          fprintf (pont_pessoas, "%s\n", pessoas.pessoas[i].estado); //printar o estado que a pessoa mora no arquivo
-          fprintf (pont_pessoas, "%s\n", pessoas.pessoas[i].cidade); //printar a cidade que a pessoa mora no arquivo
+          strncpy(estadoNome, pessoas.pessoas[i].estado, sizeof(pessoas.pessoas[i].estado));
+          fprintf (pont_pessoas, "%s\n", estadoNome); //printar o estado que a pessoa mora no arquivo
+          strncpy(cidadeNome, pessoas.pessoas[i].cidade, sizeof(pessoas.pessoas[i].cidade));
+          fprintf (pont_pessoas, "%s\n", cidadeNome); //printar a cidade que a pessoa mora no arquivo
         }
       }
 
@@ -654,6 +663,7 @@ void relatorio (Pessoas pessoas) {
     return;
   }
 
+  printf ("Há %d pessoas cadastradas.\n", numero_pessoas);
 	printf ("Percentual de pessoas em cada faixa etária\n");
 	float primeiro = 0, segundo = 0, terceiro = 0, quarto = 0, quinto = 0;
 	int i;
@@ -751,6 +761,8 @@ int main () {
 			consultar_pessoa(pessoas);
 		else if (opcao == 7) {
 			excluir_pessoa (pessoas);
+      pessoas = carregar_pesssoas();
+      pessoas = carregar_pesssoas(); //gambiarra para funcionar
     }
 		else if (opcao == 8)
 			relatorio(pessoas);
@@ -759,10 +771,9 @@ int main () {
 		else
 			printf ("Opção Inválida\n");
 
-    atualizar_arquivo(pais, pessoas);
+    /*atualizar_arquivo(pais, pessoas);
     pessoas = carregar_pesssoas();
-    pessoas = carregar_pesssoas(); //gambiarra para funcionar
-    pais = carregar_pais();
+    pais = carregar_pais();*/
 	}
 
 	return 0;
