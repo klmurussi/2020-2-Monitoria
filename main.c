@@ -393,15 +393,16 @@ void listarPessoas_porEstado (Pais pais, Pessoas pessoas) {
   }
 
   //transformar tudo em minusculo
-	for (i = 0; i < strlen(estado); i++) {
+	/*for (i = 0; i < strlen(estado); i++) {
 			estado[i] = tolower(estado[i]);
-	}
+	}*/
 
   //verificação se o estado é cadastrado
   int okay = 1; //okay igual a 1 significa que não é cadastrado
   int lugar; //irá armazenar a posição do estado pesquisado no vetor
 
 	for (i = 0; i < numero_total; i++) {
+    printf ("%s-%s\n", pais.estado[i].nome, estado);
 		if (strcmp (estado, pais.estado[i].nome) == 0){
 			okay = 0;
 			lugar = i;
