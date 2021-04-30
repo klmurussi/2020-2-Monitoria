@@ -37,6 +37,7 @@ typedef struct PAIS Pais;
 int continuar = 1; // enquanto continuar for igual a 1, o programa não vai parar
 int numero_total = 0; // número de estados cadastrados
 int numero_pessoas = 0; //número de pessoas cadastradas
+int excluidos = 0; //numero de pessoas excluidas
 //número de cidades cadastradas em cada estado
 //primeiramente zerar todas elas
 int numero [50] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -81,6 +82,8 @@ Pessoas carregar_pesssoas () {
   if (pont_pessoas != NULL) { //se o arquivo existir
     fgets (str_text, 100, pont_pessoas); //ler a primeira linha, ou seja, quantas pessoas foram cadastradas
     numero_pessoas = atoi(str_text);
+    fgets (str_text, 100, pont_pessoas);
+    excluidos = atoi (str_text);
     if (numero_pessoas == 0) {
       fclose (pont_pessoas);
       return pessoas;
@@ -125,6 +128,7 @@ void atualizar_arquivo (Pais pais, Pessoas pessoas) {
 
   //pegar todas as informações guardadas na struct pessoas e armazenar no arquivo pessoas.txt
   fprintf (pont_pessoas, "%d\n", numero_pessoas); //número total de pessoas cadastradas
+  fprintf (pont_pessoas, "%d\n", excluidos); //numero total de pessoas excluidas
   for (i = 0; i < numero_pessoas; i++) { //printar todas as pessoas
     fprintf (pont_pessoas, "%s\n", pessoas.pessoas[i].nome); //printar o nome da pessoa no arquivo
     fprintf (pont_pessoas, "%d\n", pessoas.pessoas[i].idade); //printar a idade da pessoa no arquivo
@@ -616,7 +620,7 @@ void excluir_pessoa (Pessoas pessoas) {
 			if (strcmp (nome, pessoas.pessoas[i].nome) == 0){
 				if (contador == escolha) {
 					num = i;
-          numero_pessoas--;
+          excluidos++;
           break;
 				}
 				contador++;
@@ -628,11 +632,12 @@ void excluir_pessoa (Pessoas pessoas) {
 
       //pegar todas as informações guardadas na struct pessoas e armazenar no arquivo pessoas.txt
       fprintf (pont_pessoas, "%d\n", numero_pessoas); //número total de pessoas cadastradas
+      fprintf (pont_pessoas, "%d\n", excluidos); //numero de pessoas excluidas
       if (numero_pessoas == 0) { //se o número total for zero, retornar a main
         fclose (pont_pessoas);
         return;
       }
-      for (i = 0; i <= (numero_pessoas); i++) { //printar todas as pessoas
+      for (i = 0; i < (numero_pessoas); i++) { //printar todas as pessoas
       char pessoaNome[50] = "i", estadoNome[50] = "i", cidadeNome[50] = "i";
 
         if (i < num || i > num) {
@@ -644,6 +649,13 @@ void excluir_pessoa (Pessoas pessoas) {
           fprintf (pont_pessoas, "%s\n", estadoNome); //printar o estado que a pessoa mora no arquivo
           strncpy(cidadeNome, pessoas.pessoas[i].cidade, sizeof(pessoas.pessoas[i].cidade));
           fprintf (pont_pessoas, "%s\n", cidadeNome); //printar a cidade que a pessoa mora no arquivo
+        }
+        else {
+          fprintf (pont_pessoas, "%s\n", "@@@@@"); //printar o nome da pessoa no arquivo
+          fprintf (pont_pessoas, "%d\n", -1); //printar a idade da pessoa no arquivo
+          fprintf (pont_pessoas, "%c\n", 'n'); //printar o sexo da pessoa no arquivo
+          fprintf (pont_pessoas, "%s\n", "@@@@@"); //printar o estado que a pessoa mora no arquivo
+          fprintf (pont_pessoas, "%s\n", "@@@@@"); //printar a cidade que a pessoa mora no arquivo
         }
       }
 
@@ -663,14 +675,16 @@ void relatorio (Pessoas pessoas) {
     return;
   }
 
-  printf ("Há %d pessoas cadastradas.\n", numero_pessoas);
+  int total;
+  total = numero_pessoas - excluidos;
+  printf ("Há %d pessoas cadastradas.\n", total);
 	printf ("Percentual de pessoas em cada faixa etária\n");
 	float primeiro = 0, segundo = 0, terceiro = 0, quarto = 0, quinto = 0;
 	int i;
 
 	//contar quantas pessoas tem em cada idade
 	for (i = 0; i < numero_pessoas; i++) {
-		if (pessoas.pessoas[i].idade < 16)
+		if (pessoas.pessoas[i].idade >= 0 &&pessoas.pessoas[i].idade < 16)
 			primeiro++;
 		else if (pessoas.pessoas[i].idade >= 16 && pessoas.pessoas[i].idade < 30)
 			segundo++;
@@ -678,16 +692,16 @@ void relatorio (Pessoas pessoas) {
 			terceiro++;
 		else if (pessoas.pessoas[i].idade >= 50 && pessoas.pessoas[i].idade < 61)
 			quarto++;
-		else
+		else if (pessoas.pessoas[i].idade > 60)
 			quinto++;
 	}
 
 	//fazer o calculo de porcentagem
-	primeiro = primeiro/numero_pessoas * 100;
-	segundo = segundo/numero_pessoas * 100;
-	terceiro = terceiro/numero_pessoas * 100;
-	quarto = quarto/numero_pessoas * 100;
-	quinto = quinto/numero_pessoas * 100;
+	primeiro = primeiro/total * 100;
+	segundo = segundo/total * 100;
+	terceiro = terceiro/total * 100;
+	quarto = quarto/total * 100;
+	quinto = quinto/total * 100;
 
 	printf ("Pessoas de 0 a 15 anos: %.2f% \n", primeiro);
 	printf ("Pessoas de 16 a 29 anos: %.2f% \n", segundo);
@@ -700,13 +714,13 @@ void relatorio (Pessoas pessoas) {
 	for (i = 0; i < numero_pessoas; i++) {
 		if (pessoas.pessoas[i].sexo == 'F' || pessoas.pessoas[i].sexo == 'f')
 			feminino++;
-		else 
+		else if (pessoas.pessoas[i].sexo == 'M' || pessoas.pessoas[i].sexo == 'm')
 			masculino++;
 	}
 
 	//fazer o calculo de porcentagem
-	feminino = feminino/numero_pessoas * 100;
-	masculino = masculino/numero_pessoas * 100;
+	feminino = feminino/total * 100;
+	masculino = masculino/total * 100;
 
 	printf ("\nPessoas do sexo feminino: %.2f% \n", feminino);
 	printf ("Pessoas do sexo masculino: %.2f% \n", masculino);
